@@ -151,23 +151,28 @@ def public_report(uuid):
 
 @analysis_bp.route('/report/<uuid>/download')
 def download_pdf(uuid):
-    analysis = Analysis.query.filter_by(uuid=uuid).first_or_404()
-    
-    # Check permission if not public
-    if not analysis.is_public:
-        if not current_user.is_authenticated or analysis.site.user_id != current_user.id:
-            flash('غير مسموح لك بتحميل هذا التقرير.', 'error')
-            return redirect(url_for('main.index'))
+    try:
+        analysis = Analysis.query.filter_by(uuid=uuid).first_or_404()
+        
+        # Check permission if not public
+        if not analysis.is_public:
+            if not current_user.is_authenticated or analysis.site.user_id != current_user.id:
+                flash('غير مسموح لك بتحميل هذا التقرير.', 'error')
+                return redirect(url_for('main.index'))
 
-    from app.services.pdf_generator import PDFGenerator
-    pdf_service = PDFGenerator()
-    pdf_content = pdf_service.generate_report(analysis)
-    
-    from flask import make_response
-    response = make_response(pdf_content)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = f'attachment; filename=RankMind-Report-{analysis.site.name}.pdf'
-    return response
+        from app.services.pdf_generator import PDFGenerator
+        pdf_service = PDFGenerator()
+        pdf_content = pdf_service.generate_report(analysis)
+        
+        from flask import make_response
+        response = make_response(pdf_content)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=RankMind-Report-{analysis.site.name}.pdf'
+        return response
+    except Exception as e:
+        print(f"PDF ERROR: {str(e)}")
+        flash(f'حدث خطأ أثناء توليد ملف PDF: {str(e)}', 'error')
+        return redirect(url_for('dashboard.dashboard'))
 
 @analysis_bp.route('/compare', methods=['GET', 'POST'])
 @login_required

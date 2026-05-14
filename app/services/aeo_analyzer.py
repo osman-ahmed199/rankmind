@@ -56,7 +56,7 @@ class AEOAnalyzer:
             completion = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a professional AEO (Answer Engine Optimization) expert. Always respond in valid JSON."},
+                    {"role": "system", "content": "أنت محلل SEO عربي متخصص في AI Engine Optimization (AEO). اكتب بالعربي الفصحى فقط. لا تستخدم الإنجليزية إلا للمصطلحات التقنية. لا تخلط بين اللغات. Always respond in valid JSON."},
                     {"role": "user", "content": prompt}
                 ],
                 response_format={"type": "json_object"}
