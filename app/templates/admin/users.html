@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 
-{% block title %}إدارة المستخدمين - AEO Analyzer{% endblock %}
+{% block title %}إدارة المستخدمين - RankMind{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">إدارة المستخدمين</h1>
-        <a href="{{ url_for('admin.dashboard') }}" class="text-blue-600 font-bold hover:underline">العودة للوحة التحكم</a>
+        <h1 class="text-3xl font-black text-gray-900">إدارة المستخدمين</h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="text-indigo-600 font-black hover:underline transition">العودة للوحة التحكم</a>
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <table class="w-full text-right">
             <thead class="bg-gray-50 border-b border-gray-100">
                 <tr>
-                    <th class="px-6 py-4 text-gray-500 font-bold">المستخدم</th>
-                    <th class="px-6 py-4 text-gray-500 font-bold">البريد الإلكتروني</th>
-                    <th class="px-6 py-4 text-gray-500 font-bold">الاشتراك</th>
-                    <th class="px-6 py-4 text-gray-500 font-bold">تاريخ التسجيل</th>
-                    <th class="px-6 py-4 text-gray-500 font-bold">الحالة</th>
+                    <th class="px-6 py-4 text-gray-500 font-black text-xs uppercase tracking-wider">المستخدم</th>
+                    <th class="px-6 py-4 text-gray-500 font-black text-xs uppercase tracking-wider">البريد الإلكتروني</th>
+                    <th class="px-6 py-4 text-gray-500 font-black text-xs uppercase tracking-wider">الاشتراك</th>
+                    <th class="px-6 py-4 text-gray-500 font-black text-xs uppercase tracking-wider">تاريخ التسجيل</th>
+                    <th class="px-6 py-4 text-gray-500 font-black text-xs uppercase tracking-wider">الحالة</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
                 {% for user in users %}
                 <tr class="hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 font-bold text-gray-800">{{ user.name }}</td>
-                    <td class="px-6 py-4 text-gray-600">{{ user.email }}</td>
+                    <td class="px-6 py-4 font-black text-gray-900">{{ user.name }}</td>
+                    <td class="px-6 py-4 text-gray-600 font-medium">{{ user.email }}</td>
                     <td class="px-6 py-4">
-                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-full uppercase">{{ user.subscription.plan }}</span>
+                        <span class="bg-indigo-50 text-indigo-700 text-xs font-black px-3 py-1 rounded-full border border-indigo-100 uppercase">{{ user.subscription.plan }}</span>
                     </td>
-                    <td class="px-6 py-4 text-gray-500">{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td class="px-6 py-4 text-gray-500 font-medium">{{ user.created_at.strftime('%Y-%m-%d') }}</td>
                     <td class="px-6 py-4">
                         {% if user.is_admin %}
-                            <span class="text-purple-600 font-bold">Admin</span>
+                            <span class="text-purple-600 font-black">Admin</span>
                         {% else %}
-                            <span class="text-gray-400">User</span>
+                            <span class="text-gray-400 font-bold">User</span>
                         {% endif %}
                     </td>
                 </tr>

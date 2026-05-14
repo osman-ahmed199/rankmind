@@ -1,11 +1,14 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, redirect, url_for
+from flask_login import current_user
 
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    return 'AEO Analyzer - Home Page'
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard.dashboard'))
+    return render_template('landing.html')
 
 @main_bp.route('/about')
 def about():
-    return 'About AEO Analyzer'
+    return "RankMind - AI Engine Optimization Platform"

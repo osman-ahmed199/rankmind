@@ -14,4 +14,5 @@ WTForms==3.1.1
 email-validator==2.1.0
 waitress==3.0.0
 psycopg2-binary==2.9.9
+weasyprint==60.2
 

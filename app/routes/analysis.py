@@ -115,6 +115,77 @@ def view_result(analysis_id):
                            data=result_data, 
                            grade=grade)
 
+@analysis_bp.route('/report/<uuid>')
+def public_report(uuid):
+    analysis = Analysis.query.filter_by(uuid=uuid, is_public=True).first_or_404()
+    
+    result_data = json.loads(analysis.result)
+    grade = ScoreCalculator.get_grade(analysis.score)
+    
+    return render_template('dashboard/public_report.html', 
+                           analysis=analysis, 
+                           data=result_data, 
+                           grade=grade)
+
+@analysis_bp.route('/report/<uuid>/download')
+def download_pdf(uuid):
+    analysis = Analysis.query.filter_by(uuid=uuid).first_or_404()
+    
+    # Check permission if not public
+    if not analysis.is_public:
+        if not current_user.is_authenticated or analysis.site.user_id != current_user.id:
+            flash('غير مسموح لك بتحميل هذا التقرير.', 'error')
+            return redirect(url_for('main.index'))
+
+    from app.services.pdf_generator import PDFGenerator
+    pdf_service = PDFGenerator()
+    pdf_content = pdf_service.generate_report(analysis)
+    
+    from flask import make_response
+    response = make_response(pdf_content)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=RankMind-Report-{analysis.site.name}.pdf'
+    return response
+
+@analysis_bp.route('/compare', methods=['GET', 'POST'])
+@login_required
+def compare():
+    if request.method == 'POST':
+        user_url = request.form.get('user_url')
+        comp1 = request.form.get('comp1')
+        comp2 = request.form.get('comp2')
+        comp3 = request.form.get('comp3')
+        
+        competitors = [c for c in [comp1, comp2, comp3] if c]
+        
+        if not user_url or not competitors:
+            flash('يرجى إدخال رابط موقعك ومنافس واحد على الأقل.', 'error')
+            return render_template('dashboard/compare_competitors.html')
+            
+        from app.services.competitor_analyzer import CompetitorAnalyzer
+        from app.models.competitor_analysis import CompetitorAnalysis
+        
+        analyzer = CompetitorAnalyzer()
+        result, error = analyzer.analyze_competition(user_url, competitors)
+        
+        if error:
+            flash(f'حدث خطأ في التحليل: {error}', 'error')
+            return render_template('dashboard/compare_competitors.html')
+            
+        # Save to DB
+        comp_analysis = CompetitorAnalysis(
+            user_id=current_user.id,
+            user_site_url=user_url,
+            competitor_urls=json.dumps(competitors),
+            result=json.dumps(result)
+        )
+        db.session.add(comp_analysis)
+        db.session.commit()
+        
+        return render_template('dashboard/compare_competitors.html', result=result)
+        
+    return render_template('dashboard/compare_competitors.html')
+
 @analysis_bp.route('/')
 @login_required
 def analysis():

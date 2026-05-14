@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}تقرير RankMind - {{ analysis.site.name }}{% endblock %}
+{% block title %}تقرير عام - RankMind - {{ analysis.site.name }}{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
+    <!-- Public Badge -->
+    <div class="flex justify-center mb-8">
+        <div class="bg-brand-gradient text-white px-6 py-2 rounded-full font-black shadow-lg flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            هذا تقرير عام قابل للمشاركة
+        </div>
+    </div>
+
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div>
@@ -26,14 +34,10 @@
                 </div>
             </div>
             
-            <!-- Sharing Actions -->
-            <div class="flex gap-2 mt-4">
-                <button onclick="copyReportLink()" class="p-2 text-gray-400 hover:text-indigo-600 transition" title="نسخ رابط التقرير">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                </button>
-                <button onclick="window.open('https://twitter.com/intent/tweet?text=Check out my AI Visibility Score on RankMind!&url=' + window.location.href)" class="p-2 text-gray-400 hover:text-blue-400 transition">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                </button>
+            <!-- QR Code Placeholder -->
+            <div class="mt-4 flex flex-col items-center">
+                <div id="qrcode" class="bg-white p-2 rounded-lg shadow-sm border"></div>
+                <span class="text-[10px] text-gray-400 mt-1 font-bold">SCAN TO SHARE</span>
             </div>
         </div>
     </div>
@@ -50,9 +54,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Breakdown & Issues (Left Side) -->
         <div class="lg:col-span-2 space-y-8">
-            <!-- Criteria Breakdown -->
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                 <h2 class="text-2xl font-black text-gray-900 mb-8">تحليل معايير الظهور الرقمي</h2>
                 <div class="space-y-8">
@@ -69,60 +71,42 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <!-- Issues Section -->
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <h2 class="text-2xl font-black text-gray-900 mb-8">الفجوات والمشاكل المكتشفة</h2>
-                <div class="space-y-5">
-                    {% for issue in data.issues %}
-                    <div class="flex items-start p-5 rounded-2xl border-r-4 shadow-sm
-                        {% if issue.severity == 'high' %}bg-red-50 border-red-500 text-red-900
-                        {% elif issue.severity == 'medium' %}bg-yellow-50 border-yellow-500 text-yellow-900
-                        {% else %}bg-indigo-50 border-indigo-500 text-indigo-900{% endif %}">
-                        <div class="flex-1">
-                            <span class="text-xs font-black uppercase tracking-widest mb-2 block opacity-70">درجة الخطورة: {{ issue.severity }}</span>
-                            <p class="font-bold text-lg">{{ issue.message }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
         </div>
 
-        <!-- Action Plan (Right Side) -->
         <div class="lg:col-span-1">
-            <div class="bg-gray-900 text-white p-8 rounded-2xl shadow-2xl sticky top-24 border border-gray-800">
+            <div class="bg-gray-900 text-white p-8 rounded-2xl shadow-2xl border border-gray-800">
                 <h2 class="text-2xl font-black mb-8 flex items-center">
                     <svg class="w-7 h-7 ml-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    خطة العمل التنفيذية
+                    خطوات التحسين
                 </h2>
                 <div class="space-y-8">
                     {% for step in data.action_plan %}
                     <div class="relative pr-8 border-r border-gray-800 pb-4">
-                        <div class="absolute right-[-6px] top-0 w-3 h-3 rounded-full 
-                            {% if step.priority == 'high' %}bg-red-500
-                            {% elif step.priority == 'medium' %}bg-yellow-500
-                            {% else %}bg-green-500{% endif %} shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
-                        <span class="text-xs font-black text-gray-500 mb-2 block uppercase tracking-tighter">الأولوية: {{ step.priority }}</span>
+                        <div class="absolute right-[-6px] top-0 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(255,255,255,0.2)]"></div>
                         <p class="text-gray-200 leading-relaxed font-medium">{{ step.step }}</p>
                     </div>
                     {% endfor %}
                 </div>
-                <a href="{{ url_for('analysis.download_pdf', analysis_uuid=analysis.uuid) }}" class="w-full mt-10 bg-brand-gradient hover:opacity-90 text-white font-black py-4 rounded-xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-lg">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    تحميل التقرير PDF
-                </a>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center">
+                    <p class="text-gray-400 text-sm mb-4 font-bold">هل تريد تقريراً لموقعك؟</p>
+                    <a href="{{ url_for('auth.register') }}" class="inline-block bg-brand-gradient text-white font-black px-8 py-3 rounded-xl shadow-lg hover:opacity-90 transition-all">
+                        ابدأ مجاناً الآن
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-function copyReportLink() {
-    const publicUrl = window.location.origin + "/report/{{ analysis.uuid }}";
-    navigator.clipboard.writeText(publicUrl).then(() => {
-        alert("تم نسخ رابط التقرير العام بنجاح!");
+    new QRCode(document.getElementById("qrcode"), {
+        text: window.location.href,
+        width: 80,
+        height: 80,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
     });
-}
 </script>
 {% endblock %}

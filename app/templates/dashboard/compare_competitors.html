@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}مقارنة المنافسين - RankMind{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
+    <div class="mb-10">
+        <h1 class="text-3xl font-black text-gray-900 mb-2">مقارنة المنافسين بالذكاء الاصطناعي</h1>
+        <p class="text-gray-500 font-medium">حلل موقعك مقابل 3 منافسين واكتشف فجوات الظهور الرقمي.</p>
+    </div>
+
+    <!-- Input Form -->
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mb-12">
+        <form method="POST" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-black mb-2">رابط موقعك</label>
+                    <input type="url" name="user_url" required placeholder="https://your-site.com"
+                           class="w-full px-5 py-4 border border-indigo-100 bg-indigo-50/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-black mb-2">المنافس الأول</label>
+                    <input type="url" name="comp1" required placeholder="https://competitor1.com"
+                           class="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-black mb-2">المنافس الثاني (اختياري)</label>
+                    <input type="url" name="comp2" placeholder="https://competitor2.com"
+                           class="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-black mb-2">المنافس الثالث (اختياري)</label>
+                    <input type="url" name="comp3" placeholder="https://competitor3.com"
+                           class="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-brand-gradient text-white font-black py-5 rounded-2xl shadow-xl hover:opacity-90 transition-all transform hover:scale-[1.01] flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                بدء المقارنة الذكية
+            </button>
+        </form>
+    </div>
+
+    {% if result %}
+    <!-- Results Section -->
+    <div class="space-y-10 animate-fade-in">
+        <!-- Rankings -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for rank in result.rankings %}
+            <div class="bg-white p-6 rounded-2xl shadow-sm border {% if rank.is_user %}border-indigo-500 bg-indigo-50/10{% else %}border-gray-100{% endif %} relative overflow-hidden">
+                {% if rank.is_user %}
+                <div class="absolute top-0 left-0 bg-indigo-500 text-white text-[10px] font-black px-3 py-1 rounded-br-xl">موقعك</div>
+                {% endif %}
+                <div class="text-4xl mb-4">
+                    {% if rank.rank == 1 %}🥇{% elif rank.rank == 2 %}🥈{% elif rank.rank == 3 %}🥉{% else %}🏅{% endif %}
+                </div>
+                <h3 class="font-black text-gray-900 truncate mb-1" title="{{ rank.url }}">{{ rank.url }}</h3>
+                <div class="flex items-end gap-2">
+                    <span class="text-3xl font-black text-indigo-600">{{ rank.score }}</span>
+                    <span class="text-gray-400 font-bold text-sm mb-1">Score</span>
+                </div>
+                <div class="mt-4 text-xs font-bold {% if rank.gap == 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                    Gap: {{ rank.gap }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full text-right">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 font-black text-gray-900">الموقع</th>
+                        {% for criterion in result.comparison_table.criteria %}
+                        <th class="px-6 py-4 font-black text-gray-900 text-center">{{ criterion }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for row in result.comparison_table.data %}
+                    <tr class="{% if row.url == result.rankings|selectattr('is_user', 'true')|map(attribute='url')|first %}bg-indigo-50/30{% endif %}">
+                        <td class="px-6 py-4 font-bold text-gray-700 truncate max-w-[200px]">{{ row.url }}</td>
+                        {% for score in row.scores %}
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex flex-col items-center">
+                                <span class="font-black text-indigo-600">{{ score }}%</span>
+                                <div class="w-16 bg-gray-100 h-1.5 rounded-full mt-1 overflow-hidden">
+                                    <div class="bg-indigo-500 h-full" style="width: {{ score }}%"></div>
+                                </div>
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- AI Insights -->
+        <div class="bg-indigo-900 text-white p-8 rounded-2xl shadow-xl">
+            <h2 class="text-xl font-black mb-4 flex items-center">
+                <svg class="w-6 h-6 ml-3 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                تحليل الفجوة التنافسية
+            </h2>
+            <p class="text-indigo-100 leading-relaxed text-lg font-medium">{{ result.ai_insight }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+</style>
+{% endblock %}

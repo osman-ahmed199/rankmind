@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @font-face {
+            font-family: 'Cairo';
+            src: url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: right;
+            color: #1a202c;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+        .page-break { page-break-after: always; }
+        .container { padding: 40px; }
+        
+        /* Cover Page */
+        .cover {
+            height: 1000px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            text-align: center;
+        }
+        .cover h1 { font-size: 60px; margin-bottom: 10px; font-weight: 900; }
+        .cover h2 { font-size: 24px; opacity: 0.9; margin-bottom: 40px; }
+        .cover .meta { font-size: 18px; margin-top: 100px; }
+
+        /* Sections */
+        .section-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #4338ca;
+            border-bottom: 4px solid #e0e7ff;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        /* Score Gauge */
+        .score-box {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            border: 1px solid #e2e8f0;
+        }
+        .score-number { font-size: 80px; font-weight: 900; color: #4338ca; }
+        .score-grade { font-size: 24px; font-weight: 700; color: #6366f1; }
+
+        /* Progress Bar */
+        .progress-container { margin-bottom: 25px; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 700; }
+        .progress-bar {
+            background: #edf2f7;
+            height: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            height: 100%;
+        }
+
+        /* Issues */
+        .issue-card {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-right: 5px solid;
+        }
+        .issue-high { background: #fff5f5; border-color: #f56565; color: #c53030; }
+        .issue-medium { background: #fffaf0; border-color: #ed8936; color: #9c4221; }
+        .issue-low { background: #ebf8ff; border-color: #4299e1; color: #2b6cb0; }
+
+        /* Action Plan */
+        .action-item {
+            margin-bottom: 20px;
+            padding-right: 20px;
+            border-right: 3px solid #e2e8f0;
+        }
+        .action-priority { font-size: 12px; font-weight: 900; text-transform: uppercase; }
+        
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page -->
+    <div class="cover page-break">
+        <h1>RankMind</h1>
+        <h2>تقرير تحسين ظهور الموقع في محركات الذكاء الاصطناعي</h2>
+        <div style="margin-top: 50px;">
+            <p style="font-size: 32px; font-weight: 700;">{{ analysis.site.url }}</p>
+        </div>
+        <div class="meta">
+            <p>تاريخ التقرير: {{ analysis.completed_at.strftime('%Y-%m-%d') }}</p>
+            <p>RankMind.app</p>
+        </div>
+    </div>
+
+    <!-- Page 2: Score Summary -->
+    <div class="container page-break">
+        <h2 class="section-title">ملخص التقرير والدرجة النهائية</h2>
+        <div class="score-box">
+            <div class="score-number">{{ analysis.score }}</div>
+            <div class="score-grade">GRADE: {{ grade }}</div>
+        </div>
+        
+        <div style="background: #eef2ff; padding: 25px; border-radius: 15px; border-right: 6px solid #4338ca;">
+            <h3 style="margin-top: 0; color: #1e1b4b;">رؤية المحلل الذكي:</h3>
+            <p style="font-size: 18px; color: #312e81;">{{ data.ai_summary }}</p>
+        </div>
+    </div>
+
+    <!-- Page 3: Breakdown -->
+    <div class="container page-break">
+        <h2 class="section-title">تحليل المعايير التفصيلي</h2>
+        <div style="margin-top: 40px;">
+            {% for key, item in data.breakdown.items() %}
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>{{ item.label }}</span>
+                    <span>{{ item.score }}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ item.score }}%;"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2 class="section-title" style="margin-top: 60px;">المشاكل المكتشفة</h2>
+        {% for issue in data.issues %}
+        <div class="issue-card issue-{{ issue.severity }}">
+            <div class="action-priority">الأولوية: {{ issue.severity }}</div>
+            <p style="margin: 5px 0 0 0; font-weight: 700;">{{ issue.message }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Page 4: Action Plan -->
+    <div class="container">
+        <h2 class="section-title">خطة العمل التنفيذية (Action Plan)</h2>
+        <p style="color: #718096; margin-bottom: 30px;">اتبع هذه الخطوات بالترتيب لتحسين درجة ظهور موقعك:</p>
+        
+        {% for step in data.action_plan %}
+        <div class="action-item">
+            <div class="action-priority" style="color: {% if step.priority == 'high' %}#e53e3e{% elif step.priority == 'medium' %}#dd6b20{% else %}#38a169{% endif %};">
+                الأولوية: {{ step.priority }}
+            </div>
+            <p style="margin: 5px 0 0 0; font-size: 18px; font-weight: 400;">{{ step.step }}</p>
+        </div>
+        {% endfor %}
+        
+        <div style="margin-top: 100px; text-align: center; background: #f7fafc; padding: 40px; border-radius: 20px;">
+            <h3 style="color: #2d3748;">شكراً لاستخدامك RankMind</h3>
+            <p>يمكنك دائماً الوصول للنسخة التفاعلية من التقرير عبر الرابط التالي:</p>
+            <p style="color: #4c51bf; font-weight: 700;">{{ report_url }}</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        تم توليد هذا التقرير بواسطة RankMind.app - جميع الحقوق محفوظة © 2026
+    </div>
+</body>
+</html>

@@ -1,10 +1,12 @@
 from app import db
 from datetime import datetime
+import uuid
 
 class Analysis(db.Model):
     __tablename__ = 'analyses'
     
     id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(36), default=lambda: str(uuid.uuid4()), unique=True)
     site_id = db.Column(db.Integer, db.ForeignKey('sites.id'), nullable=False)
     status = db.Column(db.String(50), default='pending')
     result = db.Column(db.Text)
@@ -13,6 +15,7 @@ class Analysis(db.Model):
     completed_at = db.Column(db.DateTime)
     analysis_date = db.Column(db.DateTime, default=datetime.utcnow)
     version = db.Column(db.Integer, default=1)
+    is_public = db.Column(db.Boolean, default=True)
     previous_analysis_id = db.Column(db.Integer, db.ForeignKey('analyses.id'), nullable=True)
     
     previous_analysis = db.relationship('Analysis', remote_side=[id])

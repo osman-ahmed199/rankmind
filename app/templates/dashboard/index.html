@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}لوحة التحكم - AEO Analyzer{% endblock %}
+{% block title %}لوحة التحكم - RankMind{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">مرحباً، {{ current_user.name }}!</h1>
+    <h1 class="text-3xl font-black mb-8 text-gray-900">مرحباً بك في RankMind، {{ current_user.name }}!</h1>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold mb-2 text-gray-700">المواقع</h2>
-            <p class="text-4xl font-bold text-blue-600">{{ current_user.sites|length }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">المواقع</h2>
+            <p class="text-4xl font-black text-indigo-600">{{ current_user.sites|length }}</p>
         </div>
         
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold mb-2 text-gray-700">التحليلات</h2>
-            <p class="text-4xl font-bold text-green-600">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">التحليلات</h2>
+            <p class="text-4xl font-black text-purple-600">
                 {% set total_analyses = 0 %}
                 {% for site in current_user.sites %}
                     {% set total_analyses = total_analyses + site.analyses|length %}
@@ -23,11 +23,11 @@
             </p>
         </div>
         
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-bold mb-2 text-gray-700">الاشتراك</h2>
-            <p class="text-2xl font-bold text-purple-600">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">الاشتراك</h2>
+            <p class="text-2xl font-black text-indigo-600 uppercase">
                 {% if current_user.subscription %}
-                    {{ current_user.subscription.plan|upper }}
+                    {{ current_user.subscription.plan }}
                 {% else %}
                     FREE
                 {% endif %}
@@ -35,48 +35,48 @@
         </div>
     </div>
     
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4 text-gray-700">تحليل موقع جديد</h2>
+    <div class="bg-white rounded-2xl shadow-xl p-8 mb-10 border border-indigo-50">
+        <h2 class="text-2xl font-black mb-6 text-gray-900">تحليل موقع جديد</h2>
         <form action="{{ url_for('analysis.start_analysis') }}" method="POST" class="flex flex-col md:flex-row gap-4">
             <input type="url" name="url" placeholder="أدخل رابط الموقع (e.g. https://example.com)" required
-                   class="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button type="submit" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300">
-                ابدأ التحليل
+                   class="flex-1 px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            <button type="submit" class="bg-brand-gradient text-white font-black py-4 px-10 rounded-xl hover:opacity-90 transition duration-300 shadow-lg">
+                ابدأ التحليل الآن
             </button>
         </form>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold text-gray-700">مواقعك</h2>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-black text-gray-900">مواقعك المضافة</h2>
         </div>
         
         {% if current_user.sites %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for site in current_user.sites %}
-                    <div class="border rounded-lg p-4 hover:shadow-md transition duration-300 bg-white relative">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-lg text-gray-800 truncate pr-2" title="{{ site.name or site.url }}">{{ site.name or site.url }}</h3>
-                            <a href="{{ url_for('dashboard.site_history', site_id=site.id) }}" class="text-gray-400 hover:text-blue-600 transition" title="تاريخ التحليلات">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div class="border border-gray-100 rounded-2xl p-6 hover:shadow-xl transition duration-300 bg-white relative group">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-black text-xl text-gray-900 truncate pr-2" title="{{ site.name or site.url }}">{{ site.name or site.url }}</h3>
+                            <a href="{{ url_for('dashboard.site_history', site_id=site.id) }}" class="text-gray-400 hover:text-indigo-600 transition p-2" title="تاريخ التحليلات">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </a>
                         </div>
-                        <p class="text-gray-600 text-sm mb-4 truncate">{{ site.url }}</p>
+                        <p class="text-gray-500 text-sm mb-6 truncate font-medium">{{ site.url }}</p>
                         
                         <!-- Mini Sparkline Area -->
-                        <div class="h-10 mb-4 opacity-50">
+                        <div class="h-12 mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
                             <canvas class="sparkline-chart" data-site-id="{{ site.id }}"></canvas>
                         </div>
 
-                        <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                            <span class="text-gray-500 text-xs">{{ site.created_at.strftime('%Y-%m-%d') }}</span>
+                        <div class="flex justify-between items-center pt-6 border-t border-gray-50">
+                            <span class="text-gray-400 text-xs font-bold">{{ site.created_at.strftime('%Y-%m-%d') }}</span>
                             {% if site.analyses %}
-                                <div class="flex items-center gap-2">
-                                    <span class="{% if site.analyses[-1].score >= 80 %}bg-green-100 text-green-800{% elif site.analyses[-1].score >= 60 %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %} text-xs font-bold px-2.5 py-0.5 rounded-full border">
-                                        Score: {{ site.analyses[-1].score }}
+                                <div class="flex items-center gap-3">
+                                    <span class="{% if site.analyses[-1].score >= 80 %}bg-green-50 text-green-700 border-green-100{% elif site.analyses[-1].score >= 60 %}bg-yellow-50 text-yellow-700 border-yellow-100{% else %}bg-red-50 text-red-700 border-red-100{% endif %} text-xs font-black px-3 py-1 rounded-full border">
+                                        {{ site.analyses[-1].score }}%
                                     </span>
-                                    <a href="{{ url_for('analysis.view_result', analysis_id=site.analyses[-1].id) }}" class="text-blue-600 hover:text-blue-800 text-xs font-bold underline">
-                                        عرض التحليل
+                                    <a href="{{ url_for('analysis.view_result', analysis_id=site.analyses[-1].id) }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-black underline">
+                                        التقرير
                                     </a>
                                 </div>
                             {% endif %}
@@ -85,7 +85,12 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="text-gray-600 text-center py-8">لم تقم بإضافة أي مواقع بعد.</p>
+            <div class="text-center py-12">
+                <div class="bg-gray-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <p class="text-gray-500 font-bold">لم تقم بإضافة أي مواقع بعد.</p>
+            </div>
         {% endif %}
     </div>
 </div>
