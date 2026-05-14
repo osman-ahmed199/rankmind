@@ -16,3 +16,6 @@ class User(UserMixin, db.Model):
     
     sites = db.relationship('Site', backref='user', lazy=True, cascade='all, delete-orphan')
     subscription = db.relationship('Subscription', backref='user', uselist=False, cascade='all, delete-orphan')
+
+    def has_active_subscription(self):
+        return self.subscription and self.subscription.status == 'active'

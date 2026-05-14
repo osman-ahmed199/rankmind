@@ -59,7 +59,8 @@ class AEOAnalyzer:
                     {"role": "system", "content": "أنت محلل SEO عربي متخصص في AI Engine Optimization (AEO). اكتب بالعربي الفصحى فقط. لا تستخدم الإنجليزية إلا للمصطلحات التقنية. لا تخلط بين اللغات. Always respond in valid JSON."},
                     {"role": "user", "content": prompt}
                 ],
-                response_format={"type": "json_object"}
+                response_format={"type": "json_object"},
+                temperature=0.1
             )
             
             try:
