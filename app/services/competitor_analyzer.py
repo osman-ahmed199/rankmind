@@ -51,7 +51,7 @@ class CompetitorAnalyzer:
         try:
             chat_completion = self.client.chat.completions.create(
                 messages=[
-                    {"role": "system", "content": "You are a professional AEO (AI Engine Optimization) Analyst. Output only JSON."},
+                    {"role": "system", "content": "أنت محلل SEO متخصص في مقارنة المنافسين لـ AI Engine Optimization (AEO). اكتب تحليل الفجوة (ai_insight) بالعربي الفصحى فقط. Output only JSON."},
                     {"role": "user", "content": prompt}
                 ],
                 model="llama-3.1-8b-instant",
