@@ -183,7 +183,7 @@ def compare():
         comp2 = request.form.get('comp2')
         comp3 = request.form.get('comp3')
         
-        competitors = [c for c in [comp1, comp2, comp3] if c]
+        competitors = [c for c in [comp1, comp2, comp3] if c and c.strip()]
         
         if not user_url or not competitors:
             flash('يرجى إدخال رابط موقعك ومنافس واحد على الأقل.', 'error')

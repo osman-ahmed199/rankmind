@@ -44,6 +44,7 @@
     {% if result %}
     <!-- Results Section -->
     <div class="space-y-10 animate-fade-in">
+        {% if result.rankings and result.rankings|length > 1 %}
         <!-- Rankings -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for rank in result.rankings %}
@@ -105,6 +106,11 @@
             </h2>
             <p class="text-indigo-100 leading-relaxed text-lg font-medium">{{ result.ai_insight }}</p>
         </div>
+        {% else %}
+        <div class="bg-yellow-50 border-r-4 border-yellow-500 p-6 rounded-2xl">
+            <p class="text-yellow-800 font-bold text-lg">أدخل منافسين للمقارنة</p>
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 </div>
