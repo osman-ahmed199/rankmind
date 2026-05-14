@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}استعراض المواقع - AEO Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">كل المواقع المحللة</h1>
+        <a href="{{ url_for('admin.dashboard') }}" class="text-blue-600 font-bold hover:underline">العودة للوحة التحكم</a>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-right">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="px-6 py-4 text-gray-500 font-bold">الموقع</th>
+                    <th class="px-6 py-4 text-gray-500 font-bold">الرابط</th>
+                    <th class="px-6 py-4 text-gray-500 font-bold">المالك</th>
+                    <th class="px-6 py-4 text-gray-500 font-bold">آخر تحليل</th>
+                    <th class="px-6 py-4 text-gray-500 font-bold">Score</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for site in sites %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 font-bold text-gray-800 truncate max-w-[200px]">{{ site.name }}</td>
+                    <td class="px-6 py-4 text-blue-600 hover:underline truncate max-w-[250px]">
+                        <a href="{{ site.url }}" target="_blank">{{ site.url }}</a>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">{{ site.user.email }}</td>
+                    <td class="px-6 py-4 text-gray-500">{{ site.last_analyzed.strftime('%Y-%m-%d') if site.last_analyzed else 'لم يحلل بعد' }}</td>
+                    <td class="px-6 py-4">
+                        {% if site.analyses %}
+                            <span class="{% if site.analyses[-1].score >= 80 %}text-green-600{% elif site.analyses[-1].score >= 60 %}text-yellow-600{% else %}text-red-600{% endif %} font-black">
+                                {{ site.analyses[-1].score }}
+                            </span>
+                        {% else %}
+                            <span class="text-gray-300">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

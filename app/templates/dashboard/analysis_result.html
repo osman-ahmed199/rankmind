@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}نتائج تحليل AEO - {{ analysis.site.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">تقرير تحليل AEO</h1>
+            <p class="text-gray-500">{{ analysis.site.url }}</p>
+            <p class="text-sm text-gray-400 mt-1">تاريخ التحليل: {{ analysis.completed_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="mt-6 md:mt-0 text-center">
+            <div class="relative inline-flex items-center justify-center">
+                <svg class="w-32 h-32">
+                    <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="58" cx="64" cy="64"/>
+                    <circle class="text-blue-600" stroke-width="8" stroke-dasharray="{{ analysis.score * 3.64 }}, 364" stroke-linecap="round" stroke="currentColor" fill="transparent" r="58" cx="64" cy="64" transform="rotate(-90 64 64)"/>
+                </svg>
+                <div class="absolute flex flex-col items-center justify-center">
+                    <span class="text-4xl font-black text-gray-800">{{ analysis.score }}</span>
+                    <span class="text-sm font-bold text-blue-600">GRADE {{ grade }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Summary -->
+    <div class="bg-blue-50 border-r-4 border-blue-600 p-6 rounded-xl mb-8">
+        <h2 class="text-xl font-bold text-blue-900 mb-3 flex items-center">
+            <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="id-13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            ملخص الذكاء الاصطناعي
+        </h2>
+        <p class="text-blue-800 leading-relaxed text-lg">
+            {{ data.ai_summary }}
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Breakdown & Issues (Left Side) -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Criteria Breakdown -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">تحليل المعايير</h2>
+                <div class="space-y-6">
+                    {% for key, item in data.breakdown.items() %}
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-bold text-gray-700">{{ item.label }}</span>
+                            <span class="font-black text-blue-600">{{ item.score }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-3">
+                            <div class="bg-blue-600 h-3 rounded-full transition-all duration-1000" style="width: {{ item.score }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Issues Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">المشاكل المكتشفة</h2>
+                <div class="space-y-4">
+                    {% for issue in data.issues %}
+                    <div class="flex items-start p-4 rounded-xl border-r-4 
+                        {% if issue.severity == 'high' %}bg-red-50 border-red-500 text-red-900
+                        {% elif issue.severity == 'medium' %}bg-yellow-50 border-yellow-500 text-yellow-900
+                        {% else %}bg-blue-50 border-blue-500 text-blue-900{% endif %}">
+                        <div class="flex-1">
+                            <span class="text-xs font-bold uppercase tracking-wider mb-1 block">خطورة: {{ issue.severity }}</span>
+                            <p class="font-medium">{{ issue.message }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Plan (Right Side) -->
+        <div class="lg:col-span-1">
+            <div class="bg-gray-900 text-white p-6 rounded-2xl shadow-xl sticky top-8">
+                <h2 class="text-xl font-bold mb-6 flex items-center">
+                    <svg class="w-6 h-6 ml-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    خطة العمل المقترحة
+                </h2>
+                <div class="space-y-6">
+                    {% for step in data.action_plan %}
+                    <div class="relative pr-8 border-r border-gray-700 pb-2">
+                        <div class="absolute right-[-5px] top-0 w-2.5 h-2.5 rounded-full 
+                            {% if step.priority == 'high' %}bg-red-500
+                            {% elif step.priority == 'medium' %}bg-yellow-500
+                            {% else %}bg-green-500{% endif %} shadow-[0_0_8px_rgba(255,255,255,0.3)]"></div>
+                        <span class="text-xs font-bold text-gray-400 mb-1 block">الأولوية: {{ step.priority }}</span>
+                        <p class="text-gray-200 leading-relaxed">{{ step.step }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="w-full mt-8 bg-green-500 hover:bg-green-600 text-gray-900 font-black py-4 rounded-xl transition-all transform hover:scale-[1.02]">
+                    تحميل التقرير PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

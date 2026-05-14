@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}الخطط والأسعار - AEO Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-12 text-center" dir="rtl">
+    <h1 class="text-4xl font-black text-gray-900 mb-4">اختر الخطة المناسبة لنمو عملك</h1>
+    <p class="text-xl text-gray-600 mb-12">حلول ذكية لتحسين ظهور موقعك في عصر الذكاء الاصطناعي</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Free Plan -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col hover:shadow-xl transition-shadow">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">المجانية</h2>
+            <div class="text-4xl font-black text-blue-600 mb-6">$0<span class="text-sm text-gray-400 font-normal">/شهرياً</span></div>
+            <ul class="text-right space-y-4 mb-10 flex-1">
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    تحليل موقع واحد فقط
+                </li>
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    تقرير AEO أساسي
+                </li>
+                <li class="flex items-center text-gray-400">
+                    <svg class="w-5 h-5 ml-2 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    بدون خطة عمل مفصلة
+                </li>
+            </ul>
+            <button disabled class="w-full bg-gray-100 text-gray-400 font-bold py-3 rounded-xl cursor-not-allowed">
+                خطتك الحالية
+            </button>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="bg-white rounded-2xl shadow-xl border-2 border-blue-500 p-8 flex flex-col relative transform scale-105">
+            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-bold">الاكثر مبيعاً</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">المحترفة</h2>
+            <div class="text-4xl font-black text-blue-600 mb-6">$29<span class="text-sm text-gray-400 font-normal">/شهرياً</span></div>
+            <ul class="text-right space-y-4 mb-10 flex-1">
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    تحليل حتى 10 مواقع
+                </li>
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    خطة عمل ذكية مفصلة
+                </li>
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    تتبع شهري للنتائج
+                </li>
+            </ul>
+            <a href="{{ url_for('billing.subscribe', plan='pro') }}" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-colors text-center">
+                ترقية الآن
+            </a>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col hover:shadow-xl transition-shadow">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">الشركات</h2>
+            <div class="text-4xl font-black text-blue-600 mb-6">$99<span class="text-sm text-gray-400 font-normal">/شهرياً</span></div>
+            <ul class="text-right space-y-4 mb-10 flex-1">
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    عدد غير محدود من المواقع
+                </li>
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    دعم فني مخصص 24/7
+                </li>
+                <li class="flex items-center text-gray-600">
+                    <svg class="w-5 h-5 ml-2 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"></path></svg>
+                    API Access كامل
+                </li>
+            </ul>
+            <a href="{{ url_for('billing.subscribe', plan='enterprise') }}" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl transition-colors text-center">
+                تواصل معنا
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-16 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 inline-block min-w-[300px]">
+        <p class="text-gray-500 mb-2">حالة اشتراكك الحالي:</p>
+        <div class="flex flex-col items-center gap-4">
+            <span class="bg-blue-100 text-blue-800 font-bold px-6 py-2 rounded-full uppercase tracking-wider border border-blue-200">
+                خطة {{ current_user.subscription.plan }}
+            </span>
+            
+            {% if current_user.subscription.plan != 'free' %}
+                <a href="{{ url_for('billing.subscribe', action='manage') }}" class="text-blue-600 font-bold hover:underline flex items-center">
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    إدارة الاشتراك
+                </a>
+            {% endif %}
+            
+            <p class="text-sm text-gray-400 mt-2">تنتهي في: {{ current_user.subscription.expires_at.strftime('%Y-%m-%d') }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

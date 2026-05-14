@@ -1,0 +1,29 @@
+# Environment
+.env
+*.env
+
+# Database
+*.db
+*.sqlite3
+instance/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+
+# AI Logs
+groq_error.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

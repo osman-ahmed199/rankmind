@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة تحكم المسؤول - AEO Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8" dir="rtl">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">لوحة تحكم المسؤول</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">إجمالي المستخدمين</h2>
+            <p class="text-4xl font-black text-blue-600">{{ users_count }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">إجمالي المواقع</h2>
+            <p class="text-4xl font-black text-green-600">{{ sites_count }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">إجمالي التحليلات</h2>
+            <p class="text-4xl font-black text-purple-600">{{ analyses_count }}</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-gray-500 text-sm font-bold uppercase mb-2">إيرادات Stripe</h2>
+            <p class="text-4xl font-black text-yellow-600">$0.00</p>
+        </div>
+    </div>
+
+    <div class="flex space-x-4 space-x-reverse">
+        <a href="{{ url_for('admin.users') }}" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition">إدارة المستخدمين</a>
+        <a href="{{ url_for('admin.sites') }}" class="bg-gray-800 text-white px-6 py-3 rounded-xl font-bold hover:bg-black transition">استعراض المواقع</a>
+    </div>
+</div>
+{% endblock %}

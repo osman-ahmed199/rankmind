@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AEO Analyzer{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="{{ url_for('main.index') }}" class="text-2xl font-bold">AEO Analyzer</a>
+                <div class="flex space-x-4 space-x-reverse">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard.dashboard') }}" class="hover:text-blue-200">لوحة التحكم</a>
+                        <a href="{{ url_for('analysis.analysis') }}" class="hover:text-blue-200">التحليل</a>
+                        <a href="{{ url_for('billing.billing') }}" class="hover:text-blue-200">الفواتير</a>
+                        <a href="{{ url_for('auth.logout') }}" class="hover:text-blue-200">خروج</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="hover:text-blue-200">دخول</a>
+                        <a href="{{ url_for('auth.register') }}" class="hover:text-blue-200">تسجيل</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-6 p-4 rounded-xl flex items-center shadow-sm border animate-pulse-once
+                        {% if category == 'success' %}bg-green-50 text-green-800 border-green-200
+                        {% elif category == 'error' %}bg-red-50 text-red-800 border-red-200
+                        {% else %}bg-blue-50 text-blue-800 border-blue-200{% endif %}">
+                        {% if category == 'error' %}
+                            <svg class="w-6 h-6 ml-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {% elif category == 'success' %}
+                            <svg class="w-6 h-6 ml-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {% endif %}
+                        <span class="font-bold">{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="bg-gray-800 text-white py-6 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 AEO Analyzer. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+</body>
+</html>

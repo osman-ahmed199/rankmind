@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل حساب جديد - AEO Analyzer{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">تسجيل حساب جديد</h1>
+    
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="mb-4">
+            {{ form.full_name.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.full_name(class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            {% if form.full_name.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.full_name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            {{ form.email.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.email(class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            {% if form.email.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.email.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            {{ form.company_name.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.company_name(class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            {% if form.company_name.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.company_name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            {{ form.password.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.password(class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            {% if form.password.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-6">
+            {{ form.confirm_password.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.confirm_password(class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            {% if form.confirm_password.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {% for error in form.confirm_password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        {{ form.submit(class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-300") }}
+    </form>
+    
+    <p class="text-center mt-6 text-gray-600">
+        لديك حساب بالفعل؟ <a href="{{ url_for('auth.login') }}" class="text-blue-600 hover:underline">سجل دخولك</a>
+    </p>
+</div>
+{% endblock %}
