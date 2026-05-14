@@ -102,13 +102,31 @@ def start_analysis():
 @analysis_bp.route('/result/<int:analysis_id>')
 @login_required
 def view_result(analysis_id):
+    # Check if ID exists, otherwise return 404
     analysis = Analysis.query.get_or_404(analysis_id)
+    
     if analysis.site.user_id != current_user.id:
         flash('غير مسموح لك بعرض هذا التحليل.', 'error')
         return redirect(url_for('dashboard.dashboard'))
     
-    result_data = json.loads(analysis.result)
-    grade = ScoreCalculator.get_grade(analysis.score)
+    # Fallback structure if analysis result is empty or None
+    fallback = {
+        "overall_score": 0, 
+        "breakdown": {}, 
+        "issues": [], 
+        "action_plan": [], 
+        "ai_summary": "حدث خطأ في التحليل أو النتيجة غير متوفرة حالياً."
+    }
+    
+    try:
+        if analysis.result:
+            result_data = json.loads(analysis.result)
+        else:
+            result_data = fallback
+    except (json.JSONDecodeError, TypeError):
+        result_data = fallback
+        
+    grade = ScoreCalculator.get_grade(analysis.score or 0)
     
     return render_template('dashboard/analysis_result.html', 
                            analysis=analysis, 
